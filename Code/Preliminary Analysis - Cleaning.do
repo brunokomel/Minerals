@@ -298,3 +298,5 @@ save dist_lvl_minerals.dta, replace
 egen sd_id = concat(sdname year)
 
 save dist_lvl_minerals.dta, replace
+
+// From here go to preliminiary analysis
