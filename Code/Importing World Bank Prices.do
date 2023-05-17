@@ -50,4 +50,8 @@ foreach var of varlist `want' {
 
 cd "$wd"
 
+egen coal_avg_std = std(coal_avg_defl) // standardizing the coal average so we can use it later
+egen coal_aus_std = std(CoalAustralian_defl)
+egen coal_sa_std = std(CoalSouthAfrican_defl)
+
 save "Monthly World Bank Prices - Deflated.dta", replace

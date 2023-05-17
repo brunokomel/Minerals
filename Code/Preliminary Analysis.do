@@ -15,13 +15,15 @@ global nss_work "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Original Data"
 
-cd "$nss"
+
 
 **************************************
 *                                    *
 *       Preliminary Analysis         *
 *                                    *
 **************************************
+
+// Yearly price data
 
 // After cleaning
 
@@ -38,7 +40,9 @@ replace wb_price_std_id12 = . if wb_price_std_id12 == 0 // I think this is an er
 
 // Assigning prices to all observations in a given year
 bysort year (wb_price_std_id12) : replace wb_price_std_id12 = wb_price_std_id12[_n-1] if missing(wb_price_std_id12)
-bysort year (dresource_id12) : replace dresource_id12 = dresource_id12[_n-1] if missing(dresource_id12)
+
+// bysort year (dresource_id12) : replace dresource_id12 = dresource_id12[_n-1] if missing(dresource_id12)
+// I think the line above is wrong.
 
 gen coal_mine = dresource_id12
 
@@ -47,4 +51,34 @@ gen interaction = wb_price_std_id12*coal_mine
 xi: reghdfe child_lab  c.wb_price_std_id12#i.coal_mine [pw = pweight], absorb(state_code round) vce(cluster sd)
 
 mdesc child_lab wb_price_std_id12 pweight state_code round sd coal_mine
+
+
+//// Monthly price data
+
+cd "$wd"
+
+use  NSS_Minerals_merged_clean_monthly_May17.dta , clear
+
+//since round 55 doesn't have months, let's just drop them
+drop if round == "55"
+
+gen state_code = substr(sd, 1,2)
+
+replace dresource_id12 = 0 if dresource_id12 == .
+
+gen coal_mine = dresource_id12
+
+gen interaction = coal_avg_std*coal_mine
+
+
+
+xi: reghdfe child_lab  c.coal_avg_std#i.coal_mine [pw = pweight] if child ==1, absorb(state_code month) vce(cluster sd) 
+
+xi: reghdfe child_lab  coal_avg_std coal_mine interaction [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+// basically a 0 effect
+
+// using district fixed effects
+xi: reghdfe child_lab  coal_avg_std coal_mine interaction [pw = pweight] if child == 1, absorb(sd round) vce(cluster sd)
+
+
 

@@ -18,7 +18,7 @@ global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 cd "$nss"
 
-global child_age = 18
+global child_age = 15 // 14 in some industries
 
 **************************************
 *                                    *
@@ -105,6 +105,8 @@ svyset psu [pw = pweight], strata(fs_strata) singleunit(centered)
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -131,7 +133,7 @@ foreach v of var * {
 gen year = 2012 // Picked year in the end of survey
 gen round = 68
 
-global variables = "id dist_code pweight worked child_lab year round date*"
+global variables = "id dist_code pweight worked child child_lab year round date*"
 
 keep $variables
 
@@ -230,6 +232,8 @@ svyset psu [pw = pweight], strata(fs_strata) singleunit(centered)
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -270,6 +274,8 @@ ren B2_q2iv date_despatch
 label var date_despatch	"Date of Despatch"
 
 ren key_Hhold key_hhold
+
+tostring date*, replace
 
 keep key_hhold date*
 
@@ -342,6 +348,8 @@ svyset psu [pw = pweight], strata(fs_strata) singleunit(centered)
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -466,6 +474,8 @@ svyset psu [pw = pweight], strata(fs_strata) singleunit(centered)
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -593,6 +603,8 @@ svyset psu [pw = pweight], strata(fs_strata) singleunit(centered)
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -723,6 +735,8 @@ use NSS_60_child_lab, clear
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -842,6 +856,8 @@ use NSS_55_child_lab, clear
 // svydescribe
 
 // Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
 gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
 // need to think about district level child labor (conditional on an observation being a child)
 
@@ -931,5 +947,5 @@ egen dist_rd = concat(sd round)
 save NSS_55_dist_child_lab.dta, replace
 
 
-
+// Next go to "Merging and Appending NSS"
 
