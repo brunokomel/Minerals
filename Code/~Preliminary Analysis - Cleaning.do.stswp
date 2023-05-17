@@ -6,9 +6,9 @@
 *                                    *
 **************************************
 
-global wd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Mineral Prices and Human Capital/Working Data"
+global wd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data"
 
-global origd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Mineral Prices and Human Capital/Original Data"
+global origd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Mineral Prices and Human Capital/Data/Original Data"
 
 
 cd "$wd"
