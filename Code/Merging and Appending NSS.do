@@ -196,7 +196,7 @@ drop if _merge == 1 // these are the Month-years for which we have mining data b
 // There are a few others from round 60, 61, 64 and 66 as well, but they total to like 130
 // So for the monthly analysis we're interested in _merge ==3 (about 2.7 million observations)
 
-save NSS_Minerals_merged_clean_monthly_May17.dta , replace 
+save NSS_Minerals_merged_clean_monthly_price.dta , replace 
 
 
 // Next go to preliminary analysis 
