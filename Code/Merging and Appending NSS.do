@@ -24,7 +24,6 @@ global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 cd "$nss/Working Data"
 
-
 use NSS_55_dist_child_lab.dta, clear
 
 append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_dist_child_lab.dta"
@@ -39,6 +38,8 @@ append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsb
 
 append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_68_dist_child_lab.dta"
 
+cd "$wd"
+
 save NSS_all_dist_child_lab.dta, replace
 
 **************************************
@@ -46,6 +47,8 @@ save NSS_all_dist_child_lab.dta, replace
 *        Merging to Minerals         *
 *                                    *
 **************************************
+
+// New way of bridging
 
 // Merging to the bridge
 
