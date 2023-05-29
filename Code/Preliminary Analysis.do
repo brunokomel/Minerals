@@ -34,8 +34,6 @@ use NSS_Minerals_merged_clean.dta , clear
 gen state_code = substr(sd, 1,2)
 
 
-// bysort year (dresource_id12) : replace dresource_id12 = dresource_id12[_n-1] if missing(dresource_id12)
-// I think the line above is wrong.
 
 gen coal_mine = dresource_id12
 
