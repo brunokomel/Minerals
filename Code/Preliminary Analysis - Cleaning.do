@@ -174,6 +174,7 @@ foreach var of varlist dresource_id* {
 
 }
 
+
 save india_mines_dists_dummies.dta, replace
 
 
@@ -203,6 +204,12 @@ foreach v of var * {
 save dist_lvl_minerals.dta, replace
 
 egen sd_id = concat(sdname year)
+
+// The following loop will correct the 0 prices as missing data, and assign the same price to each resource for each year
+foreach var of varlist wb_price* { 
+	replace `var' = . if `var' == 0
+	bysort year (`var'):  replace `var' = `var'[_n-1] if missing(`var')
+}
 
 order final_dist_1991 state *
 
