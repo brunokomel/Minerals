@@ -44,24 +44,6 @@ lab var state "state code"
 ren District_code dist_code
 lab var dist_code "district code"
 
-ren Sector sector
-lab var sector "rural or urban"
-
-ren Stratum stratum
-lab var stratum "stratum"
-
-ren Sub_Stratum_No substratum
-lab var substratum "substratum"
-
-ren FSU_Serial_No psu
-lab var psu "primary survey unit (village/block)"
-
-ren Hamlet_Group_Sub_Block_No hamlet_subblock
-lab var hamlet_subblock "hamlet group or sub-block number"
-
-ren Second_Stage_Stratum_No ss_strata_no
-lab var ss_strata_no "second stage stratum number"
-
 ren Sample_Hhld_No household
 lab var household "represents the nth household within each of the second stage stratum"
 
@@ -77,63 +59,33 @@ lab var hhid "household identifier"
 ren Multiplier_comb pweight
 lab var pweight "probability weight (combined multiplier)"
 
-// Block 5_1 only
-ren Usual_Principal_Activity_Status upas_code
-lab var upas_code "Usual principal activity status code"
+gen worked = 0
+local work_var = "Usual_Principal_Activity_Status"
+replace worked = 1 if `work_var' == "11" | `work_var' == "21" | `work_var' == "31" | `work_var' == "41" | `work_var' == "51" | `work_var' == "81"
 
-ren Whether_in_Subsidiary_Activity worked
-lab var worked "Whether respondent worked in prev. 365 days (for more than 30 days)"
-
-*** Svy commands:
-destring upas_code, replace
-
-gen fs_strata = state + sector + stratum + substratum
-lab var fs_strata "first stage strata"
+gen worked_outside_hh = 0
+replace worked_outside_hh = 1 if  `work_var' == "31" | `work_var' == "41" | `work_var' == "51" | `work_var' == "81"
+										   
+ren Usual_Principal_Activity_NIC2008 industry
 
 gen id = hhid + person
 lab var id "observation identifier"
 
-order id state dist_code sector stratum substratum psu fs_strata hamlet_subblock ss_strata household hhid person pweight age worked upas_code
-
-cd "$nss/Working Data"
-
-save  NSS_68_child_lab.dta, replace
-
-use NSS_68_child_lab, clear
-svyset psu [pw = pweight], strata(fs_strata) singleunit(centered)
-
-// svydescribe
-
 // Now to get a Child labor dummy
 gen child = age <= $child_age 
 lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == "1" ) // 
+gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
 // need to think about district level child labor (conditional on an observation being a child)
+gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
 
 cd "$nss/Working Data"
 
 save NSS_68_child_lab.dta, replace
 
-
-/*
-foreach v of var * {
-	local l`v' : variable label `v'
-	if `"`l`v''"' == "" {
-		local l`v' "`v'"
- 	}
-  }
-
-collapse  (mean) child_lab  (firstnm) state  [pw = pweight], by(dist_code)
-
-foreach v of var * {
-	label var `v' `"`l`v''"'
-}
-*/
-
 gen year = 2012 // Picked year in the end of survey
 gen round = 68
 
-global variables = "id dist_code pweight worked child child_lab year round date*"
+global variables = "id dist_code pweight worked* child child_lab* year round date* industry"
 
 keep $variables
 
@@ -143,7 +95,7 @@ egen dist_rd = concat(sd round)
 
 cd "$nss/Working Data"
 
-save NSS_68_dist_child_lab.dta, replace
+save NSS_68_child_lab.dta, replace
 
 
 **************************************
@@ -208,8 +160,8 @@ lab var pweight "probability weight (combined multiplier)"
 ren Usual_Principal_Activity_Status upas_code
 lab var upas_code "Usual principal activity status code"
 
-ren Whether_in_Subsidiary_Activity worked
-lab var worked "Whether respondent worked in prev. 365 days (for more than 30 days)"
+//ren Whether_in_Subsidiary_Activity worked
+//lab var worked "Whether respondent worked in prev. 365 days (for more than 30 days)"
 
 *** Svy commands:
 destring upas_code, replace
