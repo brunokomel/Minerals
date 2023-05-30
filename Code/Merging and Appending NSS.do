@@ -8,7 +8,6 @@
 
 global wd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data"
 
-
 global nss  "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data"
 
 global nss_work "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data"
@@ -24,23 +23,23 @@ global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 cd "$nss/Working Data"
 
-use NSS_55_dist_child_lab.dta, clear
+use NSS_55_child_lab.dta, clear
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_dist_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_child_lab.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_61_dist_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_61_child_lab.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_62_dist_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_62_child_lab.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_64_dist_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_64_child_lab.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_66_dist_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_66_child_lab.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_68_dist_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_68_child_lab.dta"
 
 cd "$wd"
 
-save NSS_all_dist_child_lab.dta, replace
+save NSS_all_child_lab.dta, replace
 
 **************************************
 *                                    *
@@ -52,7 +51,7 @@ save NSS_all_dist_child_lab.dta, replace
 
 use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/bridge dist_rd and sdname 4.dta", clear
 
-merge m:m dist_rd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_dist_child_lab.dta"
+merge m:m dist_rd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_child_lab.dta"
 
 // Note: _merge == 1 means that there was a mine, but no NSS data (Mumbai and New Delhi)
 // _merge == 2 means that there was no mine in that district for any of the years
