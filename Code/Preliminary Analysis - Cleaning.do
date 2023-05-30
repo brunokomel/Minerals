@@ -10,7 +10,6 @@ global wd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburg
 
 global origd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Original Mining Data"
 
-
 cd "$wd"
 
 use "$origd/dfhsw_GRD_public_v1.dta", clear
