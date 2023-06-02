@@ -52,8 +52,6 @@ save NSS_all_child_lab.dta, replace
 **************************************
 
 
-save "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/bride_incl_month.dta", replace
-
 use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_child_lab.dta"
 
 gen year_survey_two_digit = substr(date_survey,5,2)
