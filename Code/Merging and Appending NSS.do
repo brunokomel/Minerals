@@ -51,20 +51,10 @@ save NSS_all_child_lab.dta, replace
 *                                    *
 **************************************
 
-// New way of bridging
-
-use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/bridge dist_rd and sdname 4.dta", clear
-
-merge m:m dist_rd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_child_lab.dta"
-
-// Note: _merge == 1 means that there was a mine, but no NSS data (Mumbai and New Delhi)
-// _merge == 2 means that there was no mine in that district for any of the years
-// The way I did this was short sided, as I only named the districts that had mines
-// so _merge == 3 are districts that have mines (and which I mathced a name to a dist number)
-
-drop _merge
 
 save "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/bride_incl_month.dta", replace
+
+use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_child_lab.dta"
 
 gen year_survey_two_digit = substr(date_survey,5,2)
 
