@@ -6,6 +6,8 @@
 *                                    *
 **************************************
 
+global md "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital" // md for main directory
+
 global wd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data"
 
 global nss  "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data"
@@ -25,11 +27,13 @@ cd "$nss/Working Data"
 
 use NSS_55_child_lab.dta, clear
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_child_lab.dta"
+// append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_child_lab.dta"
+
+* we're not using the "thin rounds" (round 60 and 62)
 
 append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_61_child_lab.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_62_child_lab.dta"
+// append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_62_child_lab.dta"
 
 append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_64_child_lab.dta"
 
@@ -139,7 +143,7 @@ drop _merge
 
 cd "$wd"
 
-save "mining_bridged_May17.dta", replace
+save "mining_bridged.dta", replace
 
 gen round_id = round + id
 unique round_id // So for each round, we don't have any duplicates
@@ -170,7 +174,7 @@ cd "$wd"
 
 gen year_mo = year_survey + month_survey
 
-save NSS_Minerals_merged_clean_May17.dta , replace 
+save NSS_Minerals_merged_clean.dta , replace 
 
 
 **************************************
@@ -187,7 +191,7 @@ gen year_mo = year + month
 
 ren year year_mineral_data
 
-merge 1:m year_mo using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_Minerals_merged_clean_May17.dta"
+merge 1:m year_mo using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_Minerals_merged_clean.dta"
 
 drop if _merge == 1 // these are the Month-years for which we have mining data but not NSS
 
