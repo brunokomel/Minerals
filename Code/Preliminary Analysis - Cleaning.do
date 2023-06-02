@@ -210,6 +210,8 @@ foreach var of varlist wb_price* {
 	bysort year (`var'):  replace `var' = `var'[_n-1] if missing(`var')
 }
 
+tostring(year), replace
+
 order final_dist_1991 state *
 
 save dist_lvl_minerals.dta, replace

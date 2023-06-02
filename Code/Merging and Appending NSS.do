@@ -52,7 +52,7 @@ save NSS_all_child_lab.dta, replace
 **************************************
 
 
-use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_child_lab.dta"
+use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/NSS_all_child_lab.dta", clear
 
 gen year_survey_two_digit = substr(date_survey,5,2)
 
@@ -73,6 +73,7 @@ replace month_survey = substr(date_survey,3,2) if strlen(date_survey) == 6
 replace month_survey = substr(date_survey,2,2) if strlen(date_survey) == 5
 replace month_survey = substr(date_despatch,3,2) if date_survey == "" & strlen(date_despatch) == 6
 replace month_survey = substr(date_despatch,2,2) if date_survey == "" & strlen(date_despatch) == 5
+
 
 
 // Round 55 doesn't have dates, but it does tell us the quarter, so we can at least figure out the year.
@@ -100,9 +101,10 @@ replace quarter_survey = "2" if strlen(date_survey) == 5 &  (substr(date_survey,
 replace quarter_survey = "3" if strlen(date_survey) == 5 & (substr(date_survey,2,2) == "07" | substr(date_survey,2,2) == "08" | substr(date_survey,2,2) == "09")
 replace quarter_survey = "4" if strlen(date_survey) == 5 & (substr(date_survey,2,2) == "10" | substr(date_survey,2,2) == "11" | substr(date_survey,2,2) == "12")
 
-egen sd_id = concat(sdname year_survey)
+egen sdname = concat( state final_dist_1991)
+//egen sd_id = concat(sdname year_survey)
 
-drop if sd == "" // getting rid of Mumbai and Nee Delhi (10 obs)
+// drop if sd == "" // getting rid of Mumbai and Nee Delhi (10 obs)
 
 drop year_survey_two_digit despatch_year_two_digit sub_round
 
@@ -110,12 +112,15 @@ save "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 -
 
 use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/bridge_incl_month.dta", clear
 
-merge m:1 sd_id using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
+drop year
+ren year_survey year
+
+merge m:1 sdname year using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
 
 // We can see that the years where we have NSS data, most observations are matched
 tab year if _merge == 2
 
-drop if _merge == 2
+drop if _merge == 2 // this drops districts where we have mine data but we didn't match them to NSS data (around 16-18 districts for each of the NSS years, 60 for 1999-2000)
 
 // note that the obs. in _merge == 1 that have a District Name, that's because that district had a mine at some point, but not for that specific year
 
@@ -160,7 +165,7 @@ foreach v of var * {
 
 cd "$wd"
 
-gen year_mo = year_survey + month_survey
+gen year_mo = year + month_survey
 
 save NSS_Minerals_merged_clean.dta , replace 
 
