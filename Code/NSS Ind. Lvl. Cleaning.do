@@ -105,6 +105,8 @@ ren _merge bridge_dist_name
 label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
 label values bridge_dist_name merge_label
 
+drop state_code dist_code
+
 save NSS_68_child_lab.dta, replace
 
 **************************************
@@ -197,6 +199,8 @@ ren _merge bridge_dist_name
 label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
 label values bridge_dist_name merge_label
 
+drop state_no district_no
+
 save NSS_66_child_lab.dta, replace
 
 
@@ -285,6 +289,8 @@ merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-Universityof
 ren _merge bridge_dist_name
 label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
 label values bridge_dist_name merge_label
+
+drop state_no district_no
 
 save NSS_64_child_lab.dta, replace
 
@@ -453,6 +459,8 @@ merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-Universityof
 ren _merge bridge_dist_name
 label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
 label values bridge_dist_name merge_label
+
+drop statecode districtcode
 
 save NSS_61_child_lab.dta, replace
 
@@ -661,6 +669,8 @@ merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-Universityof
 ren _merge bridge_dist_name
 label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
 label values bridge_dist_name merge_label
+
+drop state_code sub_region_code district_code
 
 save NSS_55_child_lab.dta, replace
 
