@@ -99,6 +99,13 @@ cd "$nss/Working Data"
 
 save NSS_68_child_lab.dta, replace
 
+merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss68_dist_match_icrisat_id.dta", force
+
+ren _merge bridge_dist_name
+label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
+label values bridge_dist_name merge_label
+
+save NSS_68_child_lab.dta, replace
 
 **************************************
 *                                    *
@@ -184,6 +191,14 @@ egen dist_rd = concat(sd round)
 
 save NSS_66_child_lab.dta, replace
 
+merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss66_dist_match_icrisat_id.dta", force
+
+ren _merge bridge_dist_name
+label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
+label values bridge_dist_name merge_label
+
+save NSS_66_child_lab.dta, replace
+
 
 **************************************
 *                                    *
@@ -265,7 +280,16 @@ egen dist_rd = concat(sd round)
 
 save NSS_64_child_lab.dta, replace
 
+merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss66_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
 
+ren _merge bridge_dist_name
+label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
+label values bridge_dist_name merge_label
+
+save NSS_64_child_lab.dta, replace
+
+// Not using round 62 for now
+/* 
 **************************************
 *                                    *
 *             Round 62               *
@@ -342,6 +366,7 @@ egen dist_rd = concat(sd round)
 
 save NSS_62_child_lab.dta, replace
 
+*/
 
 **************************************
 *                                    *
@@ -423,7 +448,16 @@ egen dist_rd = concat(sd round)
 
 save NSS_61_child_lab.dta, replace
 
+merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss61_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
 
+ren _merge bridge_dist_name
+label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
+label values bridge_dist_name merge_label
+
+save NSS_61_child_lab.dta, replace
+
+// Not using round 60 for now
+/* 
 **************************************
 *                                    *
 *             Round 60               *
@@ -501,7 +535,7 @@ ren dist_code sd
 egen dist_rd = concat(sd round)
 
 save NSS_60_child_lab.dta, replace
-
+*/ 
 
 **************************************
 *                                    *
@@ -618,6 +652,15 @@ keep `want' quarter_survey
 ren dist_code sd
 
 egen dist_rd = concat(sd round)
+
+save NSS_55_child_lab.dta, replace
+
+
+merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss55_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
+
+ren _merge bridge_dist_name
+label define merge_label 1 "not identified" 2 "identified not matched" 3 "identified & matched"
+label values bridge_dist_name merge_label
 
 save NSS_55_child_lab.dta, replace
 
