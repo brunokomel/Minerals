@@ -185,7 +185,7 @@ cd "$wd"
 gen year_mo = year + month_survey
 
 // The following loop will correct the 0 prices as missing data, and assign the same price to each resource for each year
-foreach var of varlist wb_price* comtrade_price* multicolour_price { 
+foreach var of varlist wb_price* comtrade_price* multicolour_price* { 
 	replace `var' = . if `var' == 0
 	bysort year (`var'):  replace `var' = `var'[_n-1] if missing(`var')
 }
