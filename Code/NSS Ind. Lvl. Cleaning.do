@@ -18,7 +18,7 @@ global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 cd "$nss"
 
-global child_age = 15 // 14 in some industries
+
 
 **************************************
 *                                    *
@@ -73,21 +73,15 @@ ren Usual_Principal_Activity_NIC2008 industry
 gen id = hhid + person
 lab var id "observation identifier"
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
 
 cd "$nss/Working Data"
 
-save NSS_68_child_lab.dta, replace
+save NSS_68_clean.dta, replace
 
 gen year = 2012 // Picked year in the end of survey
 gen round = 68
 
-global variables = "id dist_code pweight worked* child child_lab* year round date* industry attended_school"
+global variables = "id dist_code pweight worked* year round date* industry attended_school age"
 
 keep $variables
 
@@ -97,7 +91,7 @@ egen dist_rd = concat(sd round)
 
 cd "$nss/Working Data"
 
-save NSS_68_child_lab.dta, replace
+save NSS_68_clean.dta, replace
 
 merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss68_dist_match_icrisat_id.dta", force
 
@@ -107,7 +101,7 @@ label values bridge_dist_name merge_label
 
 drop state_code dist_code
 
-save NSS_68_child_lab.dta, replace
+save NSS_68_clean.dta, replace
 
 **************************************
 *                                    *
@@ -164,17 +158,13 @@ ren Usual_Principal_Activity_NIC2004 industry
 
 gen id = hhid + person
 lab var id "observation identifier"
+lab var id "observation identifier"
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
+
 
 cd "$nss/Working Data"
 
-save NSS_66_child_lab.dta, replace
+save NSS_66_clean.dta, replace
 
 replace state = substr(state,1,2)
 
@@ -191,7 +181,7 @@ ren dist_code sd
 
 egen dist_rd = concat(sd round)
 
-save NSS_66_child_lab.dta, replace
+save NSS_66_clean.dta, replace
 
 merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss66_dist_match_icrisat_id.dta", force
 
@@ -201,7 +191,7 @@ label values bridge_dist_name merge_label
 
 drop state_no district_no
 
-save NSS_66_child_lab.dta, replace
+save NSS_66_clean.dta, replace
 
 
 **************************************
@@ -258,16 +248,9 @@ gen attended_school = (`work_var' == "91")
 							
 ren B4_c11 industry
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
-
 cd "$nss/Working Data"
 
-save NSS_64_child_lab.dta, replace
+save NSS_64_clean.dta, replace
 
 egen sd = concat(state dist_code)
 
@@ -282,7 +265,7 @@ ren dist_code sd
 
 egen dist_rd = concat(sd round)
 
-save NSS_64_child_lab.dta, replace
+save NSS_64_clean.dta, replace
 
 merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss66_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
 
@@ -292,7 +275,7 @@ label values bridge_dist_name merge_label
 
 drop state_no district_no
 
-save NSS_64_child_lab.dta, replace
+save NSS_64_clean.dta, replace
 
 // Not using round 62 for now
 /* 
@@ -345,17 +328,11 @@ gen attended_school = (`work_var' == "91")
 							
 ren B5_q5 industry
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
 
 
 cd "$nss/Working Data"
 
-save NSS_62_child_lab.dta, replace
+save NSS_62_clean.dta, replace
 
 egen sd = concat(state dist_code)
 
@@ -370,7 +347,7 @@ ren dist_code sd
 
 egen dist_rd = concat(sd round)
 
-save NSS_62_child_lab.dta, replace
+save NSS_62_clean.dta, replace
 
 */
 
@@ -426,16 +403,10 @@ gen attended_school = (`work_var' == "91")
 							
 ren Usual_principal_activity_NIC_5_d industry
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
 
 cd "$nss/Working Data"
 
-save NSS_61_child_lab.dta, replace
+save NSS_61_clean.dta, replace
 
 gen state_id = substr(state, 1,2)
 
@@ -452,7 +423,7 @@ ren dist_code sd
 
 egen dist_rd = concat(sd round)
 
-save NSS_61_child_lab.dta, replace
+save NSS_61_clean.dta, replace
 
 merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss61_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
 
@@ -462,7 +433,7 @@ label values bridge_dist_name merge_label
 
 drop statecode districtcode
 
-save NSS_61_child_lab.dta, replace
+save NSS_61_clean.dta, replace
 
 // Not using round 60 for now
 /* 
@@ -516,17 +487,11 @@ gen attended_school = (`work_var' == "91")
 							
 ren B4_c10 industry
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
 
 
 cd "$nss/Working Data"
 
-save NSS_60_child_lab.dta, replace
+save NSS_60_clean.dta, replace
 
 egen sd = concat(state dist_code)
 
@@ -542,7 +507,7 @@ ren dist_code sd
 
 egen dist_rd = concat(sd round)
 
-save NSS_60_child_lab.dta, replace
+save NSS_60_clean.dta, replace
 */ 
 
 **************************************
@@ -587,16 +552,9 @@ ren B51_q5 industry
 ren sub_round quarter_survey
 lab var quarter_survey "Quarter of Survey"
 
-// Now to get a Child labor dummy
-gen child = age <= $child_age 
-lab var child "Age <= 15"
-gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
-// need to think about district level child labor (conditional on an observation being a child)
-gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
-
 cd "$nss/Working Data"
 
-save NSS_55_child_lab.dta, replace
+save NSS_55_clean.dta, replace
 
 // Changing State codes for round 55 (from NSS file from round 61)
 
@@ -661,7 +619,7 @@ ren dist_code sd
 
 egen dist_rd = concat(sd round)
 
-save NSS_55_child_lab.dta, replace
+save NSS_55_clean.dta, replace
 
 
 merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss55_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
@@ -672,7 +630,7 @@ label values bridge_dist_name merge_label
 
 drop state_code sub_region_code district_code
 
-save NSS_55_child_lab.dta, replace
+save NSS_55_clean.dta, replace
 
 
 // Next go to "Merging and Appending NSS"

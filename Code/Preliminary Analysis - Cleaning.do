@@ -26,6 +26,30 @@ tab resource
 
 tab resource year
 
+bysort resource : egen mean_capacity = mean(annuallocationcapacity) 
+
+gen mean_cap_temp = -mean_capacity // putting a negative so that the ranking is from highest value to lowest
+
+egen rank = group(mean_cap_temp resource)  // this will rank the resources according to their mean allocation capacity
+
+drop mean_cap_temp
+
+// note here that coal ranks 7th in average allocation capacity
+
+******* Selecting the top "how many" resources by production *******
+
+local how_many = 4 // change this to how many of the top resources we want 
+// for top 4, it's diamonds, oil/petroleum products, and phosphate
+
+
+gen top`how_many' = rank <= `how_many'
+
+keep if top`how_many' == 1 | resource == "coal"
+
+save dfhsw_India.dta, replace
+
+******* *******
+
 // Count unique observations
 levelsof admin1, l(values_num)
 
@@ -154,9 +178,13 @@ global all_prices_index = "comtrade_unit wb_unit usgs_unit multicolour_unit comt
 
 
 // Need to create standardized prices
-egen wb_price_std = std(wb_price), by(resource)
+foreach var of varlist comtrade_price wb_price usgs_price multicolour_price {
+egen `var'_std = std(`var'), by(resource)
+}
 
-foreach ind of varlist wb_unit wb_price wb_price_std { 
+// egen wb_price_std = std(wb_price), by(resource)
+
+foreach ind of varlist wb_unit wb_price_std  comtrade_price_std multicolour_price_std { 
 	
 foreach var of varlist dresource_id* {
 	
@@ -194,7 +222,7 @@ foreach v of var * {
  	}
   }
 
-collapse  (max) dresource_id* wb_price* (sum) prod_resource_id*  (firstnm) country final_dist_1991 state latlong latitude longitude standardmeasure wb_unit* , by(year sdname)
+collapse  (max) dresource_id* wb_price* (sum) prod_resource_id*  (firstnm) country final_dist_1991 state latlong latitude longitude standardmeasure wb_unit* comtrade* multicolour* , by(year sdname)
 
 foreach v of var * {
 	label var `v' `"`l`v''"'

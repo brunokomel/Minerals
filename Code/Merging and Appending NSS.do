@@ -25,23 +25,40 @@ global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 cd "$nss/Working Data"
 
-use NSS_55_child_lab.dta, clear
+use NSS_55_clean.dta, clear
 
-// append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_child_lab.dta"
+// append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_60_clean.dta"
 
 * we're not using the "thin rounds" (round 60 and 62)
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_61_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_61_clean.dta"
 
-// append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_62_child_lab.dta"
+// append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_62_clean.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_64_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_64_clean.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_66_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_66_clean.dta"
 
-append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_68_child_lab.dta"
+append using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Working Data/NSS_68_clean.dta"
 
 cd "$wd"
+
+save NSS_all.dta, replace
+
+**************************************
+*                                    *
+*        Adding Child Labor          *
+*                                    *
+**************************************
+
+
+global child_age = 15 // 14 in some industries
+// Now to get a Child labor dummy
+gen child = age <= $child_age 
+lab var child "Age <= 15"
+gen child_lab = (age <= $child_age ) & (worked == 1 ) // 
+// need to think about district level child labor (conditional on an observation being a child)
+gen child_lab_outside_hh = (age <= $child_age ) & (worked_outside_hh == 1 ) 
 
 save NSS_all_child_lab.dta, replace
 
@@ -115,7 +132,7 @@ use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - 
 drop year
 ren year_survey year
 
-merge m:1 sdname year using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
+merge m:1 state final_dist_1991 year using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
 
 // We can see that the years where we have NSS data, most observations are matched
 tab year if _merge == 2
@@ -167,6 +184,17 @@ cd "$wd"
 
 gen year_mo = year + month_survey
 
+// The following loop will correct the 0 prices as missing data, and assign the same price to each resource for each year
+foreach var of varlist wb_price* comtrade_price* multicolour_price { 
+	replace `var' = . if `var' == 0
+	bysort year (`var'):  replace `var' = `var'[_n-1] if missing(`var')
+}
+
+foreach var of varlist dresource_id* {
+	replace `var' = 0 if `var' == .
+}
+
+
 save NSS_Minerals_merged_clean.dta , replace 
 
 
@@ -192,7 +220,7 @@ drop if _merge == 1 // these are the Month-years for which we have mining data b
 // There are a few others from round 60, 61, 64 and 66 as well, but they total to like 130
 // So for the monthly analysis we're interested in _merge ==3 (about 2.7 million observations)
 
-save NSS_Minerals_merged_clean_monthly_price.dta , replace 
+save NSS_Minerals_merged_clean.dta , replace 
 
 
 // Next go to preliminary analysis 
