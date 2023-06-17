@@ -222,7 +222,7 @@ foreach v of var * {
  	}
   }
 
-collapse  (max) dresource_id* wb_price* (sum) prod_resource_id*  (firstnm) country final_dist_1991 state latlong latitude longitude standardmeasure wb_unit* comtrade* multicolour* , by(year sdname)
+collapse  (max) dresource_id* wb_price* comtrade_price* multicolour_price* (sum) prod_resource_id* comtrade_value wb_value usgs_value multicolour_value  (firstnm) country final_dist_1991 state latlong latitude longitude standardmeasure wb_unit* comtrade_unit* multicolour_unit* , by(year sdname)
 
 foreach v of var * {
 	label var `v' `"`l`v''"'
@@ -233,7 +233,8 @@ save dist_lvl_minerals.dta, replace
 egen sd_id = concat(sdname year)
 
 // The following loop will correct the 0 prices as missing data, and assign the same price to each resource for each year
-foreach var of varlist wb_price* { 
+
+foreach var of varlist wb_price*  { 
 	replace `var' = . if `var' == 0
 	bysort year (`var'):  replace `var' = `var'[_n-1] if missing(`var')
 }

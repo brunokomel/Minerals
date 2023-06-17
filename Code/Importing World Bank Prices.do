@@ -50,8 +50,14 @@ foreach var of varlist `want' {
 
 cd "$wd"
 
+// want to standardize Coal, diamond, oil, petroleum, and phosphate for analysis (top 5)
+
 egen coal_avg_std = std(coal_avg_defl) // standardizing the coal average so we can use it later
 egen coal_aus_std = std(CoalAustralian_defl)
 egen coal_sa_std = std(CoalSouthAfrican_defl)
 
+egen crudeoil_avg_std = std(Crudeoilaverage_defl)
+
+
 save "Monthly World Bank Prices - Deflated.dta", replace
+

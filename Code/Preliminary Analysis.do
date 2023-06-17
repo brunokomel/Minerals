@@ -37,9 +37,11 @@ ren dresource_id1 coal_mine
 
 ren wb_price_std_id1 coal_price_wb
 
+***
+
 gen interaction = coal_price_wb*coal_mine
 
-xi: reghdfe child_lab  c.coal_price_wb#i.coal_mine [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+xi: reghdfe child_lab  c.coal_price_wb##i.coal_mine [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
 
 xi: reghdfe child_lab coal_mine interaction coal_price_wb [pw=pweight] if child == 1, absorb(state_code round) vce(cluster sd)
 
@@ -51,14 +53,25 @@ mdesc child_lab coal_price_wb pweight state_code round sd coal_mine
 drop if round == "55"
 
 gen interaction2 = coal_avg_std*coal_mine
+gen high_coal_price = coal_avg_std>=1
 
-xi: reghdfe child_lab  c.coal_avg_std#i.coal_mine [pw = pweight] if child ==1, absorb(state_code month) vce(cluster sd) 
+xi: reghdfe child_lab  c.coal_avg_std##i.coal_mine [pw = pweight] if child ==1, absorb(state_code month) vce(cluster sd) 
 
 xi: reghdfe child_lab_outside_hh  coal_avg_std coal_mine interaction2 [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
-// basically a 0 effect
 
 // using district fixed effects
 xi: reghdfe child_lab  coal_avg_std coal_mine interaction2 [pw = pweight] if child == 1, absorb(sd round) vce(cluster sd)
+
+
+// Using indicators for high price months
+
+xi: reghdfe child_lab_outside_hh  high_coal_price##coal_mine [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+
+xi: reghdfe child_lab  high_coal_price##coal_mine [pw = pweight] if child == 1, absorb(sd round) vce(cluster sd)
+
+// basically a 0 effect
+
+
 
 // For other resources
 
@@ -73,3 +86,15 @@ xi: reghdfe child_lab  `which_price'_price_std_id`which_id' dresource_id`which_i
 
 restore
 
+ren dresource_id4 oil_reserve
+
+
+xi: reghdfe child_lab_outside_hh c.crudeoil_avg_std##i.oil_reserve [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+
+
+xi: reghdfe child_lab_outside_hh c.crudeoil_avg_std##i.oil_reserve [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+
+
+// I think part of the issue is that we don't have enough treated observations
+tab child_lab if coal_mine == 1 & child == 1
+tab child_lab if coal_mine == 0 & child == 1
