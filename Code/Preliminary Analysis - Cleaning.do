@@ -48,7 +48,7 @@ gen top`how_many' = rank <= `how_many'
 
 // keep if top`how_many' == 1 | resource == "coal" // moving away from the top x resources and focusing instead on coal, oil, iron ore, and bauxite
 
-keep if resource == "coal" | resource == "oil" | resource == "petroleum products" | resource == "iron" | resource == "bauxite"
+keep if resource == "coal" | resource == "oil" | resource == "petroleum products" | resource == "iron" | resource == "bauxite" | resource == "alumina" | resource == "aluminum"
 
 save dfhsw_India.dta, replace
 
