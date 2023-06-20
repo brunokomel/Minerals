@@ -172,7 +172,7 @@ foreach var of varlist dresource_id*{
 	
 	local `var'_lab: variable label `var'
 	
-	label variable prod_resource_id`idnum' `var'_lab 
+	label variable prod_resource_id`idnum' "`var' production"
 }                                                                                                         
 
 // Doing the same thing for units and prices now
