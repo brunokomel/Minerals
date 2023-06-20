@@ -6,6 +6,8 @@
 *                                    *
 **************************************
 
+global md "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital" // md for main directory
+
 global wd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data"
 
 global origd "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Original Mining Data"
@@ -44,7 +46,9 @@ local how_many = 4 // change this to how many of the top resources we want
 
 gen top`how_many' = rank <= `how_many'
 
-keep if top`how_many' == 1 | resource == "coal"
+// keep if top`how_many' == 1 | resource == "coal" // moving away from the top x resources and focusing instead on coal, oil, iron ore, and bauxite
+
+keep if resource == "coal" | resource == "oil" | resource == "petroleum products" | resource == "iron" | resource == "bauxite"
 
 save dfhsw_India.dta, replace
 
