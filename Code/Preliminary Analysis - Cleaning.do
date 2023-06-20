@@ -119,14 +119,14 @@ foreach var of local makedummy {
             if `frst' == 0 {
                 // label new dummy with old value
                 if `num' == `value' + 1 {
-                    label variable `dum' "`l`var'' - ``var'vl`value''"
+                    label variable `dum' "``var'vl`value''" // was "`l`var'' - ``var'vl`value''"
                 }
             }
             // if 1/2 binary or cat. that starts with 1
             if `frst' == 1 {
                 // label new dummy with old value
                 if `num' == `value' {
-                    label variable `dum' "`l`var'' - ``var'vl`value''"
+                    label variable `dum' "``var'vl`value''" // was "`l`var'' - ``var'vl`value''"
                 }
             }
         }
@@ -140,14 +140,14 @@ foreach var of local makedummy {
             if `frst' == 0 {
                 // label new dummy with old value
                 if `num' == `value' + 1 {
-                    label variable `dum' "`l`var'' - ``var'vl`value''"
+                    label variable `dum' "``var'vl`value''" // was "`l`var'' - ``var'vl`value''"
                 }
             }
             // if 1/2 binary or cat. that starts with 1
             if `frst' == 1 {
                 // label new dummy with old value
                 if `num' == `value' {
-                    label variable `dum' "`l`var'' - ``var'vl`value''"
+                    label variable `dum' "``var'vl`value''" // was "`l`var'' - ``var'vl`value''"
                 }
             }
         }
@@ -236,12 +236,16 @@ save dist_lvl_minerals.dta, replace
 
 egen sd_id = concat(sdname year)
 
+/* we're going with monthly prices, so we don't need all of this
 // The following loop will correct the 0 prices as missing data, and assign the same price to each resource for each year
 
 foreach var of varlist wb_price*  { 
 	replace `var' = . if `var' == 0
 	bysort year (`var'):  replace `var' = `var'[_n-1] if missing(`var')
 }
+*/
+
+drop wb* comtrade* multicolour*
 
 tostring(year), replace
 

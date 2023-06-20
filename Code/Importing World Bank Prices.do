@@ -50,7 +50,11 @@ foreach var of varlist `want' {
 
 cd "$wd"
 
-// want to standardize Coal, diamond, oil, petroleum, and phosphate for analysis (top 5)
+******************
+*   IMPORTANT    *
+******************
+
+// Only price variables that end in "_std" will be included final dataframe
 
 egen coal_avg_std = std(coal_avg_defl) // standardizing the coal average so we can use it later
 egen coal_aus_std = std(CoalAustralian_defl)

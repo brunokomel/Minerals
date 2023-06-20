@@ -16,85 +16,70 @@ global nss_work "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPit
 
 global nss_orig "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/NSS Data/Original Data"
 
-
 **************************************
 *                                    *
 *       Preliminary Analysis         *
 *                                    *
 **************************************
 
-// Yearly price data
-
-// After cleaning
-
 cd "$wd"
 
 use  NSS_Minerals_merged_clean.dta , clear
 
-gen state_code = substr(sd, 1,2)
+*********************
+// Cleaning preamble
 
-ren dresource_id1 coal_mine
-
-ren wb_price_std_id1 coal_price_wb
-
-***
-
-gen interaction = coal_price_wb*coal_mine
-
-xi: reghdfe child_lab  c.coal_price_wb##i.coal_mine [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
-
-xi: reghdfe child_lab coal_mine interaction coal_price_wb [pw=pweight] if child == 1, absorb(state_code round) vce(cluster sd)
-
-mdesc child_lab coal_price_wb pweight state_code round sd coal_mine
-
-//// Monthly price data
-
-//since round 55 doesn't have months, let's just drop them
+drop if round == "."
 drop if round == "55"
 
-gen interaction2 = coal_avg_std*coal_mine
-gen high_coal_price = coal_avg_std>=1
+gen state_code = substr(sd, 1,2)
+ren sd dist_code 
 
-xi: reghdfe child_lab  c.coal_avg_std##i.coal_mine [pw = pweight] if child ==1, absorb(state_code month) vce(cluster sd) 
+// careful with petroleum products
+label var dresource_id7 "petroleum_products"
 
-xi: reghdfe child_lab_outside_hh  coal_avg_std coal_mine interaction2 [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+foreach v of varlist dresource* {
+   local x : variable label `v'
+   rename `v' `x'
+   label var `x' "`x' mine"
+}
 
-// using district fixed effects
-xi: reghdfe child_lab  coal_avg_std coal_mine interaction2 [pw = pweight] if child == 1, absorb(sd round) vce(cluster sd)
+egen alum = rowmax(aluminum alumina)
 
+egen crudeoil = rowmax(oil petroleum_products)
 
-// Using indicators for high price months
+ren iron iron_ore
 
-xi: reghdfe child_lab_outside_hh  high_coal_price##coal_mine [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
+ren coal_avg_std coal_std
+ren crudeoil_avg_std crudeoil_std
 
-xi: reghdfe child_lab  high_coal_price##coal_mine [pw = pweight] if child == 1, absorb(sd round) vce(cluster sd)
+*********************
 
-// basically a 0 effect
+local resource crudeoil // pick resource here
+local outcome child_lab // pick outcome (child_lab child_lab_outside_hh)
 
+di "Interaction with intensive margin"
 
+xi: reghdfe `outcome' c.`resource'_std##i.`resource' [pw = pweight] if child == 1, absorb(state_code month) vce(cluster dist_code)
 
-// For other resources
+gen high_`resource' = `resource'_std >= 1
 
-preserve 
+di "Idicator for shock >= 1 std. deviation."
 
-local which_id = 5  // mind the fact that there's only "oil" during round 55
-local which_price = "comtrade" // wb or comtrade 
+xi: reghdfe `outcome' high_`resource'##`resource' [pw = pweight] if child == 1, absorb(state_code month) vce(cluster dist_code)
 
-gen int`which_id' = `which_price'_price_std_id`which_id'*dresource_id`which_id'
+drop high_`resource'
 
-xi: reghdfe child_lab  `which_price'_price_std_id`which_id' dresource_id`which_id' int`which_id' [pw = pweight] if child == 1, absorb(sd round) vce(cluster sd)
+di "District Fixed Effects - intensive margin"
 
-restore
+xi: reghdfe `outcome' c.`resource'_std##i.`resource' [pw = pweight] if child == 1, absorb(dist_code month) vce(cluster dist_code)
 
-ren dresource_id4 oil_reserve
-
-
-xi: reghdfe child_lab_outside_hh c.crudeoil_avg_std##i.oil_reserve [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
-
-
-xi: reghdfe child_lab_outside_hh c.crudeoil_avg_std##i.oil_reserve [pw = pweight] if child == 1, absorb(state_code round) vce(cluster sd)
-
+*********************
 
 // I think part of the issue is that we don't have enough treated observations
-tab child_lab if coal_mine == 1 & child == 1
-tab child_lab if coal_mine == 0 & child == 1
+tab child_lab if coal == 1 & child == 1
+tab child_lab if coal == 0 & child == 1
+
+// I think part of the issue is that we don't have enough treated observations
+tab child_lab_outside_hh if coal == 1 & child == 1
+tab child_lab_outside_hh if coal == 0 & child == 1
