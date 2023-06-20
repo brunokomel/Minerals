@@ -58,6 +58,8 @@ egen coal_sa_std = std(CoalSouthAfrican_defl)
 
 egen crudeoil_avg_std = std(Crudeoilaverage_defl)
 
+egen iron_ore = std(Ironorecfrspot_defl)
+
 
 save "Monthly World Bank Prices - Deflated.dta", replace
 

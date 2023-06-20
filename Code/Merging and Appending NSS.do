@@ -206,7 +206,7 @@ save NSS_Minerals_merged_clean.dta , replace
 
 use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/Monthly World Bank Prices - Deflated.dta", clear
 
-keep year month Coal* coal* Crude* crude*
+keep year month Coal* coal* Crude* crude* Iron* iron*
 
 gen year_mo = year + month
 
