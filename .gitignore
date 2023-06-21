@@ -1,0 +1,17 @@
+# Ignore data folders and .do.stswp files
+
+Code/~Importing World Bank Prices.do.stswp
+
+Code/~Merging and Appending NSS.do.stswp
+ 
+Code/~Preliminary Analysis - Cleaning.do.stswp
+ 
+Code/~Preliminary Analysis.do.stswp
+ 
+Data/
+ 
+Geolocation WD/
+ 
+Minerals/
+ 
+Papers/
