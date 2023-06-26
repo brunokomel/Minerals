@@ -55,8 +55,8 @@ ren crudeoil_avg_std crudeoil_std
 
 *********************
 
-local resource crudeoil // pick resource here
-local outcome child_lab // pick outcome (child_lab child_lab_outside_hh)
+local resource iron_ore // pick resource here (alum, crudeoil, iron_ore, coal)
+local outcome child_lab_outside_hh // pick outcome (child_lab child_lab_outside_hh)
 
 di "Interaction with intensive margin"
 
