@@ -224,8 +224,8 @@ use  india_mines_dists_dummies.dta, clear
 
 // egen ds = concat(DistrictName StateName)
 
-//egen sdname = concat( state final_dist_1991)
-egen sdname = concat( state brown_dist_names)
+egen sdname = concat( state final_dist_1991)
+
 
 // Now we can collapse
 
@@ -237,7 +237,7 @@ foreach v of var * {
  	}
   }
 
-collapse  (max) dresource_id* wb_price* comtrade_price* multicolour_price* (sum) prod_resource_id* comtrade_value wb_value usgs_value multicolour_value  (firstnm) country final_dist_1991 brown_dist_names state latlong latitude longitude standardmeasure wb_unit* comtrade_unit* multicolour_unit* , by(year sdname)
+collapse  (max) dresource_id* wb_price* comtrade_price* multicolour_price* (sum) prod_resource_id* comtrade_value wb_value usgs_value multicolour_value  (firstnm) country final_dist_1991 state latlong latitude longitude standardmeasure wb_unit* comtrade_unit* multicolour_unit* , by(year brown_dist_names)
 
 foreach v of var * {
 	label var `v' `"`l`v''"'
@@ -245,7 +245,8 @@ foreach v of var * {
 
 save dist_lvl_minerals.dta, replace
 
-egen sd_id = concat(sdname year)
+// egen sd_id = concat(sdname year)
+egen sd_id = concat(brown_dist_names year)
 
 /* we're going with monthly prices, so we don't need all of this
 // The following loop will correct the 0 prices as missing data, and assign the same price to each resource for each year

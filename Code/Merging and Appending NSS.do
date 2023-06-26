@@ -118,7 +118,9 @@ replace quarter_survey = "2" if strlen(date_survey) == 5 &  (substr(date_survey,
 replace quarter_survey = "3" if strlen(date_survey) == 5 & (substr(date_survey,2,2) == "07" | substr(date_survey,2,2) == "08" | substr(date_survey,2,2) == "09")
 replace quarter_survey = "4" if strlen(date_survey) == 5 & (substr(date_survey,2,2) == "10" | substr(date_survey,2,2) == "11" | substr(date_survey,2,2) == "12")
 
-egen sdname = concat( state final_dist_1991)
+//egen sdname = concat( state final_dist_1991) // This is Ritadhi's mapping
+egen sdname = concat( nss_state nss_district) 
+ren StateDistrict brown_dist_names
 //egen sd_id = concat(sdname year_survey)
 
 // drop if sd == "" // getting rid of Mumbai and Nee Delhi (10 obs)
@@ -132,7 +134,11 @@ use "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - 
 drop year
 ren year_survey year
 
-merge m:1 state final_dist_1991 year using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
+//merge m:1 state final_dist_1991 year using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
+
+//drop _merge
+
+merge m:1 brown_dist_names year using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/dist_lvl_minerals.dta"
 
 // We can see that the years where we have NSS data, most observations are matched
 tab year if _merge == 2
