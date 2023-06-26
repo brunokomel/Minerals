@@ -74,6 +74,12 @@ egen latlong = concat(latitude longitude), format(%25.0g) punct(" , ")
 
 collapse (firstnm) final_dist_1991 state latitude longitude, by(latlong)
 
+merge 1:m latlong using "$md/Data/NSS Data/Brown Mapping - NSS Districts/geo_data_districts_matched_brown.dta", force
+
+ren FixedDistrictNames brown_dist_names
+
+drop _merge
+
 merge 1:m latitude longitude using "$wd/dfhsw_India.dta"
 
 drop _merge 
@@ -83,14 +89,6 @@ save india_mines_dists_1991.dta, replace // using the district boundaries from 1
 use india_mines_dists_1991.dta, clear
 
 encode resource, gen(resource_id)
-
-// Using the mapping from Brown
-
-use "$md/Data/NSS Data/Brown Mapping - NSS Districts/geo_data_districts_matched_brown.dta", clear
-
-merge 1:m latlong using "$wd/dfhsw_India.dta", force
-
-
 
 
 
@@ -226,7 +224,8 @@ use  india_mines_dists_dummies.dta, clear
 
 // egen ds = concat(DistrictName StateName)
 
-egen sdname = concat( state final_dist_1991)
+//egen sdname = concat( state final_dist_1991)
+egen sdname = concat( state brown_dist_names)
 
 // Now we can collapse
 
@@ -238,7 +237,7 @@ foreach v of var * {
  	}
   }
 
-collapse  (max) dresource_id* wb_price* comtrade_price* multicolour_price* (sum) prod_resource_id* comtrade_value wb_value usgs_value multicolour_value  (firstnm) country final_dist_1991 state latlong latitude longitude standardmeasure wb_unit* comtrade_unit* multicolour_unit* , by(year sdname)
+collapse  (max) dresource_id* wb_price* comtrade_price* multicolour_price* (sum) prod_resource_id* comtrade_value wb_value usgs_value multicolour_value  (firstnm) country final_dist_1991 brown_dist_names state latlong latitude longitude standardmeasure wb_unit* comtrade_unit* multicolour_unit* , by(year sdname)
 
 foreach v of var * {
 	label var `v' `"`l`v''"'
@@ -261,7 +260,8 @@ drop wb* comtrade* multicolour*
 
 tostring(year), replace
 
-order final_dist_1991 state *
+//order final_dist_1991 state *
+order brown_dist_names state *
 
 save dist_lvl_minerals.dta, replace
 

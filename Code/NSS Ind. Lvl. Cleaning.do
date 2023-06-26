@@ -101,6 +101,10 @@ label values bridge_dist_name merge_label
 
 drop state_code dist_code
 
+merge m:1 sd using "$wd/brown_nss68_dist_match.dta", force
+
+drop _merge
+
 save NSS_68_clean.dta, replace
 
 **************************************
@@ -191,6 +195,10 @@ label values bridge_dist_name merge_label
 
 drop state_no district_no
 
+merge m:1 sd using "$wd/brown_nss66_dist_match.dta", force
+
+drop _merge
+
 save NSS_66_clean.dta, replace
 
 
@@ -274,6 +282,10 @@ label define merge_label 1 "not identified" 2 "identified not matched" 3 "identi
 label values bridge_dist_name merge_label
 
 drop state_no district_no
+
+merge m:1 sd using "$wd/brown_nss64_dist_match.dta", force
+
+drop _merge
 
 save NSS_64_clean.dta, replace
 
@@ -432,6 +444,11 @@ label define merge_label 1 "not identified" 2 "identified not matched" 3 "identi
 label values bridge_dist_name merge_label
 
 drop statecode districtcode
+
+merge m:1 sd using "$wd/brown_nss61_dist_match.dta", force
+// Note that we're losing about 3500 obs here
+
+drop _merge
 
 save NSS_61_clean.dta, replace
 
@@ -596,7 +613,7 @@ replace state_new = "31" if state == "32"
 replace state_new = "34" if state == "33"
 
 
-egen sd = concat(state_new dist_code)
+egen sd = concat(state dist_code)
 
 replace dist_code = sd
 
@@ -621,7 +638,6 @@ egen dist_rd = concat(sd round)
 
 save NSS_55_clean.dta, replace
 
-
 merge m:1 sd using "/Users/brunokomel/Library/CloudStorage/OneDrive-UniversityofPittsburgh/2 - Mineral Prices and Human Capital/Data/Working Data/nss55_dist_match_icrisat_id.dta", force // just using the NSS66 mapping for now
 
 ren _merge bridge_dist_name
@@ -629,6 +645,10 @@ label define merge_label 1 "not identified" 2 "identified not matched" 3 "identi
 label values bridge_dist_name merge_label
 
 drop state_code sub_region_code district_code
+
+merge m:1 sd using "$wd/brown_nss55_dist_match.dta", force
+
+drop _merge
 
 save NSS_55_clean.dta, replace
 
