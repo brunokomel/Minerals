@@ -50,7 +50,9 @@ gen top`how_many' = rank <= `how_many'
 
 keep if resource == "coal" | resource == "oil" | resource == "petroleum products" | resource == "iron" | resource == "bauxite" | resource == "alumina" | resource == "aluminum"
 
-save dfhsw_India.dta, replace
+egen latlong = concat(latitude longitude), format(%25.0g) punct(" , ") 
+
+save dfhsw_India.dta, replace	
 
 ******* *******
 
@@ -81,6 +83,16 @@ save india_mines_dists_1991.dta, replace // using the district boundaries from 1
 use india_mines_dists_1991.dta, clear
 
 encode resource, gen(resource_id)
+
+// Using the mapping from Brown
+
+use "$md/Data/NSS Data/Brown Mapping - NSS Districts/geo_data_districts_matched_brown.dta", clear
+
+merge 1:m latlong using "$wd/dfhsw_India.dta", force
+
+
+
+
 
 // thanks to this guy https://www.btskinner.io/code/create-dummy-variables-from-categorical-variables-keeping-labels-stata/
 // 
